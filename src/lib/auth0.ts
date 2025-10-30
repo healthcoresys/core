@@ -1,5 +1,4 @@
 import { NextRequest } from 'next/server'
-import { getSession } from '@auth0/nextjs-auth0'
 import { env } from './env'
 import { createRemoteJWKSet, jwtVerify, JWTPayload } from 'jose'
 
@@ -13,19 +12,9 @@ export interface Auth0User {
   'https://healthcore.systems/tenant_slug'?: string
 }
 
-export async function getAuthenticatedUser(request: NextRequest): Promise<Auth0User | null> {
-  try {
-    const session = await getSession(request)
-    
-    if (!session?.user) {
-      return null
-    }
-    
-    return session.user as Auth0User
-  } catch (error) {
-    console.error('Auth0 session error:', error)
-    return null
-  }
+export async function getAuthenticatedUser(_request: NextRequest): Promise<Auth0User | null> {
+  // Session-based auth is not used in this App Router implementation.
+  return null
 }
 
 export function validateTenantAccess(user: Auth0User, requiredTenantId?: string): boolean {
